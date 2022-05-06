@@ -6,8 +6,8 @@ RO_DRIVE="$PWD/resources/rootfs.ext4"
 KERNEL="$PWD/resources/vmlinux"
 TAP_DEV="fc-${SB_ID}-tap0"
 
-KERNEL_BOOT_ARGS="init=/sbin/boottime_init panic=1 pci=off reboot=k tsc=reliable quiet 8250.nr_uarts=0 ipv6.disable=1"
-#KERNEL_BOOT_ARGS="console=ttyS0 reboot=k panic=1 pci=off nomodules ipv6.disable=1"
+KERNEL_BOOT_ARGS="init=/sbin/boottime_init panic=1 pci=off nomodules reboot=k tsc=reliable quiet i8042.nokbd i8042.noaux 8250.nr_uarts=0 ipv6.disable=1"
+#KERNEL_BOOT_ARGS="console=ttyS0 reboot=k panic=1 pci=off nomodules i8042.nokbd i8042.noaux ipv6.disable=1"
 
 API_SOCKET="/tmp/firecracker-sb${SB_ID}.sock"
 CURL=(curl --silent --show-error --header "Content-Type: application/json" --unix-socket "${API_SOCKET}" --write-out "HTTP %{http_code}")
