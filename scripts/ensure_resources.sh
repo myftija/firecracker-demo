@@ -7,6 +7,7 @@ TEST_RES="$SCRIPT_DIR/../resources"
 S3_BUCKET="spec.ccfc.min"
 TARGET="$(uname -m)"
 FC_VERSION="v1.1.2"
+CH_LINUX_FORK_RELEASE="ch-release-v6.12.8-20250114"
 
 ensure_firecracker() {
     file_path="$TEST_RES/firecracker"
@@ -34,8 +35,9 @@ ensure_firecracker() {
 
 ensure_kernel() {
     file_path="$TEST_RES/vmlinux"
-    kv="4.14"
-    wget -q "https://s3.amazonaws.com/$S3_BUCKET/ci-artifacts/kernels/$TARGET/vmlinux-$kv.bin" -O "$file_path"
+    
+    wget -q "https://github.com/cloud-hypervisor/linux/releases/download/$CH_LINUX_FORK_RELEASE/vmlinux" -O "$file_path"
+
     echo "Saved kernel at $file_path..."
 }
 
