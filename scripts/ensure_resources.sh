@@ -21,8 +21,8 @@ ensure_firecracker() {
     mkdir -p "$TMP_FOLDER"
     tar -zxf "$TMP_ARCHIVE" -C "$TMP_FOLDER"
 
-    # Get the firecracker binary
-    cp "$(find "$TMP_FOLDER" -name "firecracker*$TARGET*")" "$file_path"
+    # Get the firecracker binary (exclude debug version)
+    cp "$(find "$TMP_FOLDER" -name "firecracker*$TARGET*" ! -name "*.debug" | head -n 1)" "$file_path"
     chmod +x "$file_path"
 
     echo "Saved firecracker at $file_path"
