@@ -27,6 +27,8 @@ curl_put '/actions' <<EOF
 }
 EOF
 kill -9 "$FC_PID" &>/dev/null || true
+# helps avoid issues with busy TAP devices on the restored VMs
+sleep 0.5s
 
 METRICS_FILE="$PWD/output/fc-sb${SB_ID}-metrics"
 rm -f "$METRICS_FILE"
