@@ -46,5 +46,9 @@ Started, snapshotted and restored $total microVMs in $delta_ms milliseconds.
 MicroVM mutation rate was $rate microVMs per second.
 EOL
 
-./extract-restore-times.sh &
+{
+  sleep 2
+  ./extract-restore-times.sh &
+  ./extract-restore-to-network-ready-times.sh &
+} &
 
