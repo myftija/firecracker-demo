@@ -130,6 +130,7 @@ curl_put '/actions' <<EOF
 }
 EOF
 
+if [[ "${SKIP_BOOT_NETWORK_READINESS_CHECK:-false}" != "true" ]]; then
 # non-blocking network readiness check - ping
 {
   max_attempts=600
@@ -173,5 +174,5 @@ EOF
     echo "BOOT_TO_NETWORK_READY_TCP22_TIMEOUT" >> "${logfile}"
   fi
 } &
-
+fi
 
