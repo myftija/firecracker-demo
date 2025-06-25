@@ -34,8 +34,9 @@ curl_put() {
 }
 
 logfile="$PWD/output/fc-sb${SB_ID}-log"
-#metricsfile="$PWD/output/fc-sb${SB_ID}-metrics"
-metricsfile="/dev/null"
+METRICS_FILE_00="$PWD/output/fc-sb${SB_ID}-metrics-00"
+rm -f "$METRICS_FILE_00"
+touch "$METRICS_FILE_00"
 
 touch "$logfile"
 
@@ -78,7 +79,7 @@ EOF
 
 curl_put '/metrics' <<EOF
 {
-  "metrics_path": "$metricsfile"
+  "metrics_path": "$METRICS_FILE_00"
 }
 EOF
 
