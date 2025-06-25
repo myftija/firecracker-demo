@@ -20,17 +20,16 @@ do
     continue
   fi
 
-  # Extract load_snapshot latency in microseconds and convert to integer milliseconds
-  load_snapshot_us=$(cat "$metrics_file" | jq -r '.latencies_us.load_snapshot // empty' 2>/dev/null | tail -n 1)
+  vmm_load_snapshot_us=$(cat "$metrics_file" | jq -r '.latencies_us.vmm_load_snapshot // empty' 2>/dev/null | tail -n 1)
 
-  if [ -z "$load_snapshot_us" ] || [ "$load_snapshot_us" = "null" ]; then
+  if [ -z "$vmm_load_snapshot_us" ] || [ "$vmm_load_snapshot_us" = "null" ]; then
     echo "Failed to find load_snapshot latency in $metrics_file" >&2
     continue
   fi
 
-  load_snapshot_ms=$(echo "scale=0; $load_snapshot_us / 1000" | bc)
+  vmm_load_snapshot_ms=$(echo "scale=0; $vmm_load_snapshot_us / 1000" | bc)
 
-  echo "$i restored ${load_snapshot_ms} ms" >> "$DEST"
+  echo "$i restored ${vmm_load_snapshot_ms} ms" >> "$DEST"
 done
 
 popd > /dev/null
