@@ -3,10 +3,10 @@
 set -euo pipefail
 
 DATA_DIR="output"
-RESTORE_DEST="$PWD/${BENCHMARK_DIR:-benchmarks}/raw/restore_latencies.log"
+RESTORE_DEST="$PWD/${BENCHMARK_DIR:-benchmarks}/raw/restore.log"
 RESTORE_PING_DEST="$PWD/${BENCHMARK_DIR:-benchmarks}/raw/restore_to_network_ready_ping_probe.log"
 RESTORE_TCP22_DEST="$PWD/${BENCHMARK_DIR:-benchmarks}/raw/restore_to_network_ready_tcp22_probe.log"
-SNAPSHOT_DEST="$PWD/${BENCHMARK_DIR:-benchmarks}/raw/snapshot_create_latencies.log"
+SNAPSHOT_DEST="$PWD/${BENCHMARK_DIR:-benchmarks}/raw/snapshot.log"
 
 mkdir -p $PWD/${BENCHMARK_DIR:-benchmarks}/raw
 

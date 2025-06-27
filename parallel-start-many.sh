@@ -46,9 +46,3 @@ Started $total microVMs in $delta_ms milliseconds.
 MicroVM mutation rate was $rate microVMs per second.
 EOL
 
-{
-  sleep 2
-  ./extract-times.sh &
-  ./extract-boot-to-network-ready-times.sh &
-} &
-
