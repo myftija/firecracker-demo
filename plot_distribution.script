@@ -26,10 +26,17 @@ set arrow from STATS_pos_max_y, STATS_max_y+15 to STATS_pos_max_y, STATS_max_y l
 set label 2 gprintf("Minimum = %g ms", STATS_min_y) at STATS_pos_min_y-25, STATS_min_y-80
 set arrow from STATS_pos_min_y, STATS_min_y-77 to STATS_pos_min_y, STATS_min_y lc rgb 'black'
 
-f(x) = mean_y
-fit f(x) log_file u 1:3 via mean_y
-
-stddev_y = sqrt(FIT_WSSR / (FIT_NDF + 1))
+# Optimize for files with only 0 values - avoid expensive fit operation
+if (STATS_max_y <= 1e-10) {
+    # All values are effectively zero, skip fitting
+    mean_y = 0
+    stddev_y = 0
+} else {
+    # Normal case - perform fitting
+    f(x) = mean_y
+    fit f(x) log_file u 1:3 via mean_y
+    stddev_y = sqrt(FIT_WSSR / (FIT_NDF + 1))
+}
 
 set label 3 gprintf("'Total' mean avg = %g ms", mean_y) at STATS_max_x/2-50, 100
 set label 4 gprintf("Standard deviation = %g", stddev_y) at STATS_max_x/2-50, 80
