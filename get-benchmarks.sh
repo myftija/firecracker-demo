@@ -5,18 +5,48 @@ set -euo pipefail
 INSTANCE_TYPE=$(curl -s http://169.254.169.254/latest/meta-data/instance-type 2>/dev/null || echo "unknown_instance")
 BENCHMARK_DIR="benchmarks_${INSTANCE_TYPE}_${VM_COUNT:-1000}vms_${VM_CPUS:-1}cpus_${VM_MEM:-128}mb"
 export BENCHMARK_DIR
+mkdir -p ./$BENCHMARK_DIR
+
+capture_system_usage() {
+  local stage=$1  # "pre" or "post"
+  local timestamp=$(date)
+
+  echo "=== ${stage^}-benchmark system state ($timestamp) ===" | tee -a ./$BENCHMARK_DIR/system_resources.log
+  echo "Memory usage:" | tee -a ./$BENCHMARK_DIR/system_resources.log
+  free -h | tee -a ./$BENCHMARK_DIR/system_resources.log
+  echo "" | tee -a ./$BENCHMARK_DIR/system_resources.log
+
+  echo "Load average:" | tee -a ./$BENCHMARK_DIR/system_resources.log
+  cat /proc/loadavg | tee -a ./$BENCHMARK_DIR/system_resources.log
+  echo "" | tee -a ./$BENCHMARK_DIR/system_resources.log
+
+  echo "Top CPU processes:" | tee -a ./$BENCHMARK_DIR/system_resources.log
+  ps aux --sort=-%cpu | head -20 | tee -a ./$BENCHMARK_DIR/system_resources.log
+  echo "" | tee -a ./$BENCHMARK_DIR/system_resources.log
+
+  echo "Disk usage:" | tee -a ./$BENCHMARK_DIR/system_resources.log
+  df -h | tee -a ./$BENCHMARK_DIR/system_resources.log
+  echo "================================================" | tee -a ./$BENCHMARK_DIR/system_resources.log
+  echo "" | tee -a ./$BENCHMARK_DIR/system_resources.log
+}
 
 killall firecracker && rm -rf output && mkdir output
 
+capture_system_usage "pre-boot"
 ./parallel-start-many.sh 0 "${VM_COUNT:-1000}" 4
 sleep 5
+capture_system_usage "post-boot"
+
 ./extract-boot-times.sh
 
 killall firecracker && rm -rf output && mkdir output
 sleep 5
 
+capture_system_usage "pre-restore"
 ./parallel-restore-many.sh 0 "${VM_COUNT:-1000}" 4
 sleep 5
+capture_system_usage "post-restore"
+
 ./extract-restore-times.sh
 
 mkdir -p ./$BENCHMARK_DIR/plots
