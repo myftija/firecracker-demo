@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+SKIP_BOOT_NETWORK_READINESS_CHECK=true
 source ./start-firecracker.sh # avoid forking to enable referencing the declared variables, e.g., SB_ID, API_SOCKET, etc...
 sleep 0.5s
 
