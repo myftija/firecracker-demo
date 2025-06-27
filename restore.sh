@@ -30,9 +30,9 @@ kill -9 "$FC_PID" &>/dev/null || true
 # helps avoid issues with busy TAP devices on the restored VMs
 sleep 0.5s
 
-METRICS_FILE="$PWD/output/fc-sb${SB_ID}-metrics"
-rm -f "$METRICS_FILE"
-touch "$METRICS_FILE"
+METRICS_FILE_01="$PWD/output/fc-sb${SB_ID}-metrics-01"
+rm -f "$METRICS_FILE_01"
+touch "$METRICS_FILE_01"
 
 rm -f "$API_SOCKET"
 restore_call_ts=$(date +%s.%N)
@@ -46,7 +46,7 @@ done
 
 curl_put '/metrics' <<EOF
 {
-  "metrics_path": "$METRICS_FILE"
+  "metrics_path": "$METRICS_FILE_01"
 }
 EOF
 
